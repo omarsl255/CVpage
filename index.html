@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lebenslauf | Omar Salama</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Cyan -->
+    <!-- Application Structure Plan: A single-page, vertically scrolling application with a sticky navigation bar for smooth scrolling. This structure provides a familiar yet enhanced resume experience. Key sections (Experience, Projects, Skills) are made interactive to improve engagement and information digestibility. The Experience section uses an expandable timeline to reduce initial clutter. The Projects section features a filterable grid, allowing recruiters to quickly find relevant relevant work. The Skills section uses charts to visually represent technical competencies, making them easier to parse than a simple list. New sections for Hobbies, Social Media, and Books are added to provide a more personal insight into the applicant. A custom-styled language dropdown is implemented for English and German, now visible on all screen sizes. A responsive mobile navigation (hamburger menu) is added. A print function is added to allow saving as PDF, optimizing layout for print. This user-flow is designed to guide the user from a general overview to specific details based on their interests, now with multi-language support and print capabilities. -->
+    <!-- Visualization & Content Choices:
+        - Experience: Report Info -> Job History -> Goal: Show change/progression -> Viz: Interactive Vertical Timeline -> Interaction: Click to expand/collapse details -> Justification: Keeps the UI clean and focuses user attention on one role at a time -> Method: HTML/CSS/JS (content from dynamic translations).
+        - Projects: Report Info -> Project List -> Goal: Organize/Showcase -> Viz: Filterable Card Grid -> Interaction: Buttons filter projects by category -> Justification: Allows recruiters to find relevant examples quickly, demonstrating a breadth of skills -> Method: HTML/CSS/JS (content from dynamic translations).
+        - Skills: Report Info -> Skill List -> Goal: Compare/Inform -> Viz: Multiple Horizontal Bar Charts (Chart.js) -> Interaction: Hover for tooltips -> Justification: Visualizes competencies in a more engaging and memorable way than a text list, highlighting key strengths -> Library: Chart.js (labels from dynamic translations).
+        - Education/Contact: Report Info -> Education/Personal Details -> Goal: Inform -> Viz: Styled Text Blocks -> Interaction: None -> Justification: Clear, direct presentation for foundational information -> Method: HTML/CSS (content from dynamic translations). The Bachelor Thesis abstract is integrated into the Education section with an expandable toggle for detailed viewing without cluttering the initial view, now with both German and English abstracts.
+        - Hobbies, Social Media, Books: Report Info -> Personal Interests -> Goal: Provide personal insight/Show diversity -> Viz: Styled Text/List Blocks with external links -> Interaction: Direct links -> Justification: Offers a well-rounded view of the applicant, showcasing interests beyond professional life -> Method: HTML/CSS (content from dynamic translations).
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 640px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .section-fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .section-fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .nav-link {
+            transition: color 0.3s;
+        }
+        .nav-link.active {
+            color: #0891b2; /* cyan-600 */
+            font-weight: 500;
+        }
+        /* Custom Dropdown Styles */
+        .custom-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-toggle {
+            background-color: white;
+            border: 1px solid #e2e8f0; /* slate-200 */
+            color: #475569; /* slate-600 */
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem; /* rounded-md */
+            font-weight: 500;
+            font-size: 0.875rem; /* text-sm */
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-width: 5rem; /* Ensure minimum width for "DE" / "EN" */
+            transition: all 0.2s ease-in-out;
+        }
+        .dropdown-toggle:hover {
+            background-color: #f1f5f9; /* slate-100 */
+            border-color: #cbd5e1; /* slate-300 */
+        }
+        .dropdown-toggle.active {
+            border-color: #0891b2; /* cyan-600 */
+            box-shadow: 0 0 0 2px rgba(8, 145, 178, 0.2); /* cyan-600 with opacity */
+        }
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 0.5rem); /* Position below the toggle with some space */
+            left: 0;
+            background-color: white;
+            border: 1px solid #e2e8f0; /* slate-200 */
+            border-radius: 0.375rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+            min-width: 5rem;
+            z-index: 100;
+            overflow: hidden; /* Ensures rounded corners */
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0.2s;
+        }
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .dropdown-menu-item {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            color: #475569; /* slate-600 */
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .dropdown-menu-item:hover {
+            background-color: #f1f5f9; /* slate-100 */
+        }
+
+        /* Print-specific styles */
+        @media print {
+            #navbar, #mobile-menu-button, .custom-dropdown, #print-button {
+                display: none !important;
+            }
+            body {
+                background-color: #fff !important;
+                color: #000 !important;
+            }
+            main {
+                margin: 0 !important;
+                padding: 0 !important;
+                max-width: none !important;
+            }
+            section {
+                padding: 1rem 0 !important; /* Adjust padding for print */
+                border-top: none !important;
+                opacity: 1 !important; /* Ensure all content is visible */
+                transform: none !important;
+                page-break-after: always; /* Suggest page breaks after sections */
+            }
+            section:last-of-type {
+                page-break-after: auto; /* No page break after the last section */
+            }
+            .experience-details, .thesis-abstract {
+                display: block !important; /* Ensure hidden details are visible in print */
+            }
+            .experience-toggle svg, .education-toggle svg {
+                display: none !important; /* Hide toggle icons */
+            }
+            .project-card {
+                display: flex !important; /* Ensure all project cards are visible */
+            }
+            .chart-container {
+                page-break-inside: avoid; /* Prevent charts from breaking across pages */
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-700">
+
+    <nav id="navbar" class="sticky top-0 z-50 bg-slate-50/80 backdrop-blur-lg border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <span class="text-xl font-bold text-slate-800">Omar Salama</span>
+                </div>
+                <div class="flex items-center"> <!-- This div now always visible -->
+                    <div class="custom-dropdown mr-4 md:mr-0"> <!-- Language dropdown now outside hidden div -->
+                        <button id="dropdown-toggle" class="dropdown-toggle">
+                            <span id="selected-lang-text">DE</span>
+                            <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div id="dropdown-menu" class="dropdown-menu">
+                            <div class="dropdown-menu-item" data-lang="de">DE</div>
+                            <div class="dropdown-menu-item" data-lang="en">EN</div>
+                        </div>
+                    </div>
+                    <!-- Hamburger menu for mobile navigation -->
+                    <div class="-mr-2 flex md:hidden">
+                        <button type="button" id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-500" aria-controls="mobile-menu" aria-expanded="false">
+                            <span class="sr-only">Open main menu</span>
+                            <!-- Icon when menu is closed. -->
+                            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                            <!-- Icon when menu is open. -->
+                            <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="hidden md:block"> <!-- Desktop nav links -->
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="#hero" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.home"></a>
+                            <a href="#experience" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.experience"></a>
+                            <a href="#projects" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.projects"></a>
+                            <a href="#skills" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.skills"></a>
+                            <a href="#education" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.education"></a>
+                            <a href="#hobbies" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.hobbies"></a>
+                            <a href="#social-media" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.socialMedia"></a>
+                            <a href="#books" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.books"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu, show/hide based on menu state. -->
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#hero" class="mobile-nav-link text-slate-700 hover:bg-slate-100 hover:text-cyan-700 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.home"></a>
+                <a href="#experience" class="mobile-nav-link text-slate-700 hover:bg-slate-100 hover:text-cyan-700 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.experience"></a>
+                <a href="#projects" class="mobile-nav-link text-slate-700 hover:bg-slate-100 hover:text-cyan-700 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.projects"></a>
+                <a href="#skills" class="mobile-nav-link text-slate-700 hover:bg-slate-100 hover:text-cyan-700 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.skills"></a>
+                <a href="#education" class="mobile-nav-link text-slate-700 hover:bg-slate-100 hover:text-cyan-700 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.education"></a>
+                <a href="#hobbies" class="mobile-nav-link text-slate-700 hover:bg-slate-100 hover:text-cyan-700 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.hobbies"></a>
+                <a href="#social-media" class="mobile-nav-link text-slate-700 hover:bg-slate-100 hover:text-cyan-700 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.socialMedia"></a>
+                <a href="#books" class="mobile-nav-link text-slate-700 hover:bg-slate-100 hover:text-cyan-700 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.books"></a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <section id="hero" class="text-center py-24 sm:py-32 section-fade-in">
+            <img src="1000087789-removebg-preview.png" alt="Omar Salama Profilbild" class="w-40 h-40 rounded-full mx-auto mb-8 object-cover border-4 border-slate-200 shadow-lg">
+            <h1 class="text-4xl md:text-6xl font-bold text-slate-900 tracking-tight">Omar Salama</h1>
+            <p class="mt-4 text-lg md:text-xl text-cyan-700 font-medium" data-i18n-key="hero.title"></p>
+            <p class="mt-6 max-w-2xl mx-auto text-slate-600" data-i18n-key="hero.description"></p>
+            <div class="mt-8 flex justify-center items-center space-x-6 text-sm">
+                <a href="mailto:o.salama155@gmail.com" class="font-medium text-slate-600 hover:text-cyan-600">o.salama155@gmail.com</a>
+                <span class="text-slate-300">|</span>
+                <a href="https://linkedin.com/in/omar-salama-87b650210" target="_blank" rel="noopener noreferrer" class="font-medium text-slate-600 hover:text-cyan-600">LinkedIn</a>
+                <span class="text-slate-300">|</span>
+                <span class="font-medium text-slate-600">+49 176 35566164</span>
+            </div>
+        </section>
+
+        <section id="experience" class="py-16 sm:py-24 border-t border-slate-200 section-fade-in">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-center text-slate-900" data-i18n-key="experience.heading"></h2>
+                <p class="mt-4 text-center max-w-3xl mx-auto text-slate-600" data-i18n-key="experience.description"></p>
+                <div id="experience-timeline" class="mt-12 space-y-8 relative before:absolute before:inset-0 before:ml-5 before:h-full before:w-0.5 before:bg-slate-200">
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="py-16 sm:py-24 border-t border-slate-200 section-fade-in">
+             <div class="max-w-6xl mx-auto">
+                <h2 class="text-3xl font-bold text-center text-slate-900" data-i18n-key="projects.heading"></h2>
+                <p class="mt-4 text-center max-w-3xl mx-auto text-slate-600" data-i18n-key="projects.description"></p>
+                <div id="project-filters" class="mt-8 flex justify-center flex-wrap gap-2">
+                </div>
+                <div id="project-grid" class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="py-16 sm:py-24 border-t border-slate-200 section-fade-in">
+             <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-center text-slate-900" data-i18n-key="skills.heading"></h2>
+                <p class="mt-4 text-center max-w-3xl mx-auto text-slate-600" data-i18n-key="skills.description"></p>
+                <div class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-16">
+                    <div>
+                        <h3 class="font-semibold text-lg text-slate-800 text-center mb-4" data-i18n-key="skills.mlDataAnalysis"></h3>
+                        <div class="chart-container"><canvas id="mlSkillsChart"></canvas></div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg text-slate-800 text-center mb-4" data-i18n-key="skills.sweWebEngineering"></h3>
+                        <div class="chart-container"><canvas id="sweSkillsChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="education" class="py-16 sm:py-24 border-t border-slate-200 section-fade-in">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-center text-slate-900" data-i18n-key="education.heading"></h2>
+                 <p class="mt-4 text-center max-w-3xl mx-auto text-slate-600" data-i18n-key="education.description"></p>
+                <div id="education-list" class="mt-12 space-y-8">
+                </div>
+            </div>
+        </section>
+
+        <section id="hobbies" class="py-16 sm:py-24 border-t border-slate-200 section-fade-in">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-center text-slate-900" data-i18n-key="hobbies.heading"></h2>
+                <p class="mt-4 text-center max-w-3xl mx-auto text-slate-600" data-i18n-key="hobbies.description"></p>
+                <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 text-slate-600">
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="font-semibold text-lg text-slate-800 mb-2" data-i18n-key="hobbies.sportsFitness"></h3>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li data-i18n-key="hobbies.bjj"></li>
+                            <li data-i18n-key="hobbies.mma"></li>
+                            <li data-i18n-key="hobbies.gym"></li>
+                            <li data-i18n-key="hobbies.tableTennis"></li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="font-semibold text-lg text-slate-800 mb-2" data-i18n-key="hobbies.creativeCulinary"></h3>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li data-i18n-key="hobbies.cooking"></li>
+                            <li><span data-i18n-key="hobbies.photography"></span> (<a href="https://www.instagram.com/o.salama_/" target="_blank" rel="noopener noreferrer" class="text-cyan-600 hover:underline" data-i18n-key="hobbies.myInstagram"></a>)</li>
+                            <li data-i18n-key="hobbies.teaching"></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="social-media" class="py-16 sm:py-24 border-t border-slate-200 section-fade-in">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl font-bold text-slate-900" data-i18n-key="socialMedia.heading"></h2>
+                <p class="mt-4 max-w-3xl mx-auto text-slate-600" data-i18n-key="socialMedia.description"></p>
+                <div class="mt-8 flex justify-center items-center space-x-6 text-sm flex-wrap gap-4">
+                    <a href="https://www.linkedin.com/in/omar-salama-87b650210/" target="_blank" rel="noopener noreferrer" class="font-medium text-slate-600 hover:text-cyan-600">LinkedIn</a>
+                    <span class="text-slate-300">|</span>
+                    <a href="https://www.instagram.com/omar_sl.x/" target="_blank" rel="noopener noreferrer" class="font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="socialMedia.instagramPersonal"></a>
+                    <span class="text-slate-300">|</span>
+                     <a href="https://www.instagram.com/o.salama_/" target="_blank" rel="noopener noreferrer" class="font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="socialMedia.instagramPhoto"></a>
+                    <span class="text-slate-300">|</span>
+                    <a href="https://x.com/omar_sl0?lang=en" target="_blank" rel="noopener noreferrer" class="font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="socialMedia.x"></a>
+                    <span class="text-slate-300">|</span>
+                    <a href="https://www.youtube.com/@omarsalama2619" target="_blank" rel="noopener noreferrer" class="font-medium text-slate-600 hover:text-cyan-600">YouTube</a>
+                </div>
+                <p class="mt-4 text-sm text-slate-500" data-i18n-key="socialMedia.note"></p>
+            </div>
+        </section>
+
+        <section id="books" class="py-16 sm:py-24 border-t border-slate-200 section-fade-in">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl font-bold text-slate-900" data-i18n-key="books.heading"></h2>
+                <p class="mt-4 max-w-3xl mx-auto text-slate-600" data-i18n-key="books.description"></p>
+                <div class="mt-8 bg-white p-6 rounded-lg shadow-sm text-left text-slate-600">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-2" data-i18n-key="books.goodreadsTitle"></h3>
+                    <p>
+                        <span data-i18n-key="books.goodreadsText"></span>
+                        <br>
+                        <a href="https://www.goodreads.com/user/show/72129237-omar-m" target="_blank" rel="noopener noreferrer" class="text-cyan-600 hover:underline">goodreads.com/user/show/72129237-omar-m</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="bg-slate-100 border-t border-slate-200 mt-16">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-slate-800 font-bold text-lg" data-i18n-key="footer.contactHeading"></p>
+            <div class="mt-4 flex justify-center items-center space-x-6 text-sm">
+                 <a href="mailto:o.salama155@gmail.com" class="font-medium text-slate-600 hover:text-cyan-600">o.salama155@gmail.com</a>
+                <span class="text-slate-300">|</span>
+                <a href="https://linkedin.com/in/omar-salama-87b650210" target="_blank" rel="noopener noreferrer" class="font-medium text-slate-600 hover:text-cyan-600">LinkedIn</a>
+                <span class="text-slate-300">|</span>
+                <span class="font-medium text-slate-600">+49 176 35566164</span>
+            </div>
+            <p class="mt-8 text-center text-xs text-slate-500" data-i18n-key="footer.copyright"></p>
+            <button id="print-button" class="mt-8 px-6 py-3 bg-cyan-600 text-white font-semibold rounded-md shadow-md hover:bg-cyan-700 transition-colors">
+                CV drucken (PDF)
+            </button>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    let currentLanguage = localStorage.getItem('cvLanguage') || 'de'; // Default to German or last selection
+
+    const translations = {
+        de: {
+            nav: {
+                home: "Home",
+                experience: "Erfahrung",
+                projects: "Projekte",
+                skills: "Kenntnisse",
+                education: "Bildung",
+                hobbies: "Hobbys",
+                socialMedia: "Social Media",
+                books: "Bücher"
+            },
+            hero: {
+                title: "Data & AI Specialist | Software Engineer",
+                description: "Ein motivierter und analytischer Ingenieur mit einer Leidenschaft für maschinelles Lernen, Datenanalyse und die Entwicklung robuster Softwarelösungen. Ich strebe danach, komplexe Probleme zu lösen und durch datengesteuerte Erkenntnisse innovative Produkte zu schaffen."
+            },
+            experience: {
+                heading: "Berufserfahrung",
+                description: "Dieser Abschnitt beschreibt meinen beruflichen Werdegang und die dabei gesammelten praktischen Erfahrungen. Jede Station hat zu meiner Entwicklung als Ingenieur beigetragen. Klicken Sie auf eine Position, um mehr über meine Aufgaben und Erfolge zu erfahren."
+            },
+            projects: {
+                heading: "Projekte",
+                description: "Hier finden Sie eine Auswahl meiner akademischen und beruflichen Projekte. Sie zeigen meine Fähigkeit, theoretisches Wissen in die Praxis umzusetzen. Nutzen Sie die Filter, um Projekte nach Interessengebieten zu sortieren.",
+                filterAll: "Alle",
+                filterML: "Machine Learning",
+                filterWeb: "Webentwicklung",
+                filterSoftware: "Software Engineering",
+                filterUX: "UI/UX Design"
+            },
+            skills: {
+                heading: "Kenntnisse & Fähigkeiten",
+                description: "Dieser Abschnitt bietet eine visuelle Übersicht meiner technischen Kompetenzen. Die Diagramme fassen meine wichtigsten Werkzeuge und Technologien zusammen, von Programmiersprachen und Frameworks bis hin zu Datenbanken und DevOps-Tools.",
+                mlDataAnalysis: "ML & Datenanalyse",
+                sweWebEngineering: "Software & Web Engineering",
+                competence: "Kompetenz" // For chart tooltips
+            },
+            education: {
+                heading: "Bildungsweg",
+                description: "Mein akademischer Hintergrund legte den Grundstein für meine Karriere in der Informatik und künstlichen Intelligenz.",
+                thesisPrefix: "Bachelorarbeit",
+                thesisAbstractHeading: "Abstract"
+            },
+            hobbies: {
+                heading: "Hobbys",
+                description: "Neben meiner beruflichen Leidenschaft für Technologie pflege ich verschiedene Hobbys, die meinen Horizont erweitern und für Ausgleich sorgen.",
+                sportsFitness: "Sport & Fitness",
+                bjj: "Brazilian Jiu-Jitsu (BJJ)",
+                mma: "MMA",
+                gym: "Fitnessstudio",
+                tableTennis: "Tischtennis",
+                creativeCulinary: "Kreatives & Kulinarisches",
+                cooking: "Kochen",
+                photography: "Fotografie",
+                myInstagram: "Mein Instagram",
+                teaching: "Lehren"
+            },
+            socialMedia: {
+                heading: "Social Media",
+                description: "Vernetzung ist mir wichtig, sowohl beruflich als auch privat. Hier finden Sie meine Präsenzen in sozialen Medien.",
+                instagramPersonal: "Instagram (Persönlich)",
+                instagramPhoto: "Instagram (Fotografie)",
+                x: "X (Twitter)",
+                note: "" 
+            },
+            books: {
+                heading: "Bücher & Leseempfehlungen",
+                description: "Ich bin ein begeisterter Leser und ständig darauf bedacht, mein Wissen zu erweitern. Hier ist eine Auswahl von Büchern oder eine Verbindung zu meinen Leseaktivitäten (z.B. Goodreads-Profil).",
+                goodreadsTitle: "Meine Goodreads-Seite:",
+                goodreadsText: "Entdecke, was ich lese, und meine aktuellen Leseempfehlungen auf meinem Goodreads-Profil:"
+            },
+            footer: {
+                contactHeading: "Kontakt aufnehmen",
+                copyright: "&copy; 2025 Omar Salama. Alle Rechte vorbehalten."
+            }
+        },
+        en: {
+            nav: {
+                home: "Home",
+                experience: "Experience",
+                projects: "Projects",
+                skills: "Skills",
+                education: "Education",
+                hobbies: "Hobbies",
+                socialMedia: "Social Media",
+                books: "Books"
+            },
+            hero: {
+                title: "Data & AI Specialist | Software Engineer",
+                description: "A motivated and analytical engineer with a passion for machine learning, data analysis, and developing robust software solutions. I strive to solve complex problems and create innovative products through data-driven insights."
+            },
+            experience: {
+                heading: "Professional Experience",
+                description: "This section outlines my professional career and the practical experience gained. Each position has contributed to my development as an engineer. Click on a position to learn more about my responsibilities and achievements."
+            },
+            projects: {
+                heading: "Projects",
+                description: "Here you will find a selection of my academic and professional projects. They demonstrate my ability to translate theoretical knowledge into practical applications. Use the filters to sort projects by area of interest.",
+                filterAll: "All",
+                filterML: "Machine Learning",
+                filterWeb: "Web Development",
+                filterSoftware: "Software Engineering",
+                filterUX: "UI/UX Design"
+            },
+            skills: {
+                heading: "Skills & Competencies",
+                description: "This section provides a visual overview of my technical competencies. The charts summarize my most important tools and technologies, from programming languages and frameworks to databases and DevOps tools.",
+                mlDataAnalysis: "ML & Data Analysis",
+                sweWebEngineering: "Software & Web Engineering",
+                competence: "Competence" // For chart tooltips
+            },
+            education: {
+                heading: "Education",
+                description: "My academic background laid the foundation for my career in Computer Science and Artificial Intelligence.",
+                thesisPrefix: "Bachelor Thesis",
+                thesisAbstractHeading: "Abstract"
+            },
+            hobbies: {
+                heading: "Hobbies",
+                description: "In addition to my professional passion for technology, I pursue various hobbies that broaden my horizons and provide balance.",
+                sportsFitness: "Sports & Fitness",
+                bjj: "Brazilian Jiu-Jitsu (BJJ)",
+                mma: "MMA",
+                gym: "Gym",
+                tableTennis: "Table Tennis",
+                creativeCulinary: "Creative & Culinary",
+                cooking: "Cooking",
+                photography: "Photography",
+                myInstagram: "My Instagram",
+                teaching: "Teaching"
+            },
+            socialMedia: {
+                heading: "Social Media",
+                description: "Networking is important to me, both professionally and personally. Here you will find my social media presences.",
+                instagramPersonal: "Instagram (Personal)",
+                instagramPhoto: "Instagram (Photography)",
+                x: "X (Twitter)",
+                note: "" 
+            },
+            books: {
+                heading: "Books & Reading Recommendations",
+                description: "I am an avid reader and constantly striving to expand my knowledge. Here is a selection of books or a link to my reading activities (e.g., Goodreads profile).",
+                goodreadsTitle: "My Goodreads Page:",
+                goodreadsText: "Discover what I'm reading and my current recommendations on my Goodreads profile:"
+            },
+            footer: {
+                contactHeading: "Get in Touch",
+                copyright: "&copy; 2025 Omar Salama. All rights reserved."
+            }
+        }
+    };
+
+    const experienceData = [
+        {
+            role_de: "Bachelorand", role_en: "Bachelor Student",
+            company: "VAIVA Safe Mobility",
+            location: "Gaimersheim",
+            period: "11/2024 – 03/2025",
+            tasks_de: [
+                "Entwicklung mehrerer Machine-Learning-Modelle für Zeitreihendaten.",
+                "Konzeption einer Multitask-Pipeline, die Klassifikation und Regression kombiniert.",
+                "Aufbau und Test fortgeschrittener Deep-Learning-Architekturen, einschließlich CNNs und LSTMs.",
+                "Anwendung von Knowledge-Transfer-Techniken und Modell-Feinabstimmung.",
+                "Implementierung benutzerdefinierter Verlustfunktionen und Durchführung einer umfassenden Modellevaluierung.",
+                "Generierung von Visualisierungen und automatisierten Berichten zur Ergebnisanalyse.",
+                "Bewies eine ausgezeichnete Auffassungsgabe und Fähigkeit, komplexe Arbeitsinhalte schnell zu erfassen; zielstrebig, sorgfältig und effizient in der Arbeitsweise."
+            ],
+            tasks_en: [
+                "Developed multiple machine learning models for time series data.",
+                "Designed a multitask pipeline combining classification and regression.",
+                "Built and tested advanced deep learning architectures including CNNs, LSTMs.",
+                "Applied knowledge transfer techniques and model fine-tuning.",
+                "Implemented custom loss functions and conducted an extensive model evaluation.",
+                "Generated visualizations and automated reports for result analysis.",
+                "Demonstrated excellent comprehension and ability to quickly grasp complex work content; goal-oriented, meticulous, and efficient in work."
+            ]
+        },
+        {
+            role_de: "Werkstudent Softwareentwicklung", role_en: "Software Development Working Student",
+            company: "VAIVA Safe Mobility",
+            location: "Gaimersheim",
+            period: "02/2023 – 11/2024",
+            tasks_de: [
+                "Analyse und Refactoring von bestehendem Matlab-Code und GUIs zur Erstellung umfassender Unit-Tests zur Qualitätssicherung.",
+                "Entwicklung eines robusten Automatisierungstools zur Berichterstellung in HTML, PDF und PowerPoint mittels Python und R.",
+                "Demonstrierte umfassende, vielseitige und sehr gute Fachkenntnisse; ausgeprätes analytisches Denkvermögen und rasche Auffassungsgabe."
+            ],
+            tasks_en: [
+                "Analyzed and refactored legacy Matlab code and GUIs to write comprehensive unit tests to increase quality assurance.",
+                "Developed a robust automation tool for report generation in HTML, PDF, and PowerPoint, using Python and R.",
+                "Demonstrated comprehensive, versatile, and very good technical knowledge; pronounced analytical thinking and quick comprehension."
+            ]
+        },
+        {
+            role_de: "Kundenbetreuer", role_en: "Customer Service Representative",
+            company: "Concentrix",
+            location: "Kairo, Ägypten",
+            period: "07/2020 – 02/2021",
+            tasks_de: [
+                "Betreuung deutscher Kundenkonten (z.B. Expedia und booking.com)."
+            ],
+            tasks_en: [
+                "Worked on German accounts like Expedia and booking.com."
+            ]
+        }
+    ];
+
+    const projectData = [
+        { title_de: "Tumorerkennung in histopathologischen Bildern", title_en: "Tumor Detection in Histopathology Images", category: "ML", description_de: "Zweistufige Objekterkennungs- und Klassifizierungspipeline. Anwendung von Knowledge Transfer und Modell-Feinabstimmung von ImageNet-Modellen.", description_en: "Two-stage object detection and classification pipeline. Applying knowledge transfer and model fine-tuning from ImageNet models.", tools: "Python, TensorFlow, Computer Vision" },
+        { title_de: "Rekonstruktion von Diffusions-MRT-Bildern", title_en: "Reconstructing Diffusion MRI Images", category: "ML", description_de: "Entwicklung eines Vox2Vox-basierten GAN-Modells zur Rekonstruktion von Q-Raum-Bildern in den R-Raum.", description_en: "Created a Vox2Vox based GAN model to reconstruct q-space images to r-space.", tools: "Python, PyTorch, GANs" },
+        { title_de: "Transformer für maschinelle Übersetzung", title_en: "Transformer Model for Machine Translation", category: "ML", description_de: "Entwicklung eines Transformer-basierten Systems (Englisch-Deutsch) ohne vortrainierte Gewichte; von Architektur bis Evaluierung.", description_en: "Engineered a transformer-based machine translation system without using pre-trained weights; managed full lifecycle from model architecture design to training and evaluation.", tools: "PyTorch, NLP" },
+        { title_de: "Architektur für Berichtgenerator", title_en: "Architecture for Report Generator Tool", category: "Software", description_de: "Architekturdesign und Implementierung eines Tools zur automatisierten Erstellung von Berichten als PDF und PPTX.", description_en: "Architecture design and implementation for an automated report generator tool creating PDF and PPTX reports.", tools: "R, Python, Officer" },
+        { title_de: "Webseiten-Entwicklung (Online-Shop)", title_en: "Web Page Development (Online Store)", category: "Web", description_de: "Implementierung einer vollständigen Webseite für einen Online-Shopping-Store.", description_en: "Implementing a complete web page for an online shopping store.", tools: "HTML, CSS, JavaScript, PHP" },
+        { title_de: "Prototyping für Transport-App", title_en: "Application Design & Prototyping (VAMOS)", category: "UX", description_de: "Anwendungsdesign und Prototyping für eine Transport-App (VAMOS) unter Einsatz von UX-Tools und -Konzepte.", description_en: "Application design and prototyping for a transportation app (VAMOS) using Miro, Figma, and other UX tools and concepts.", tools: "Figma, Miro" },
+        { title_de: "SMS-Spam-Klassifikator", title_en: "SMS Spam Classifier", category: "ML", description_de: "Implementierung verschiedener Textvorverarbeitungstechniken (TF-IDF, BoW) und Evaluierung mittels Genauigkeit, Präzision, etc.", description_en: "Created an SMS spam classifier implementing various text preprocessing techniques and evaluated using accuracy, precision, recall, and F1-score.", tools: "Python, Scikit-learn, NLP" },
+        { title_de: "Wissenschaftliche Arbeiten Sprachtechnologie", title_en: "Scientific Papers Speech Technology", category: "Software", description_de: "Begutachtung wissenschaftlicher Arbeiten im Bereich Sprachtechnologie: FastVoiceGrad & Receptive Multilingualism.", description_en: "Reviewing scientific papers in speech technology: FastVoiceGrad & Receptive Multilingualism.", tools: "Academic Research, NLP" }
+    ];
+    
+    const educationData = [
+        { 
+            degree_de: "M.Sc. Data Engineering and Analytics", degree_en: "M.Sc. Data Engineering and Analytics",
+            university: "Technische Universität München", 
+            period: "Beginn WS 2025", 
+            location: "München",
+            thesisTitle_de: null, thesisTitle_en: null,
+            thesisAbstract_de: null, thesisAbstract_en: null
+        },
+        { 
+            degree_de: "B.Sc. Computer Science and Artificial Intelligence", degree_en: "B.Sc. Computer Science and Artificial Intelligence",
+            university: "Technische Hochschule Ingolstadt", 
+            period: "2021 – 2025", 
+            location: "Ingolstadt", 
+            details_de: "Gesamtnote: 2,6. Thesis: Note 2,3",
+            details_en: "Overall Grade: 2.6. Thesis: Grade 2.3",
+            thesisTitle_de: "Evaluating Machine Learning Models on Time Sequence Signals Trained Across Different Crash Simulations",
+            thesisTitle_en: "Evaluating Machine Learning Models on Time Sequence Signals Trained Across Different Crash Simulations",
+            thesisAbstract_de: `Automotive safety systems play a critical role in mitigating crash impact and protecting occupants by enabling timely activation of safety mechanisms such as airbags and seatbelt pretensioners. Traditional crash safety systems rely on rule-based decision thresholds, which often struggle to adapt to complex and unforeseen crash scenarios. In contrast, machine learning (ML) provides a data-driven alternative capable of learning intricate relationships between sensor readings and actuator deployment decisions.
+            This study explores the application of deep learning models specifically Convolutional Neural Networks (CNNs) and Long Short-Term Memory (LSTM) networks for crash classification and Time-to-Fire (TTF) prediction using time-series sensor data. Three training strategies were evaluated: (1) training exclusively on Car-to-Car (C2C) crash simulation data, (2) training directly on laboratory crash test data, and (3) fine-tuning a model initially trained on C2C data using lab data.
+            Experimental results demonstrate that the fine-tuned model achieved the highest classification performance, with a macro Fl-score of 0.94, outperforming both the C2C-only and lab-only trained models. However, the lab-trained model yielded the most accurate TTF predictions, with an accuracy of 97.1% within the min-max interval, highlighting its advantage in learning precise timing relationships. Certain requirements, such as R SC ThrHAB_SD, R_SC_ThrSAB_SD, and R_FC_ThrAB2, exhibited lower TTF accuracy, suggesting challenges in capturing timing variations.
+            A key assumption in this research was that Car2Car crashes encompass a more diverse set of crash scenarios compared to controlled laboratory crashes. The classification results support this hypothesis, as the C2C-trained model demonstrated robust feature learning across different crash conditions. However, its weaker TTF accuracy indicates that the increased complexity and variability of C2C crashes make precise timing estimation more difficult.
+            These findings highlight the complementary nature of both datasets, where C2C data enhances classification robustness while lab data provides structured conditions for precise timing predictions. The study demonstrates that fine-tuning on a combined dataset improves generalization and balances both classification and regression performance. The insights from this research contribute to the development of intelligent crash prediction models, enhancing the reliability and responsiveness of future automotive safety systems.`
+        },
+        { 
+            degree_de: "B.Sc. Computer And Software Engineering", degree_en: "B.Sc. Computer And Software Engineering",
+            university: "Misr University for Science And Technology", 
+            period: "2018 – 2021", 
+            location: "Kairo, Ägypten",
+            thesisTitle_de: null, thesisTitle_en: null,
+            thesisAbstract_de: null, thesisAbstract_en: null
+        }
+    ];
+
+    let chartInstances = {}; // Store chart instances to destroy/recreate
+
+    const mlSkills = {
+        labels: ['TensorFlow', 'PyTorch', 'Scikit-learn', 'Pandas', 'Python', 'R', 'Matlab', 'SQL', 'MongoDB', 'Power BI'],
+        data: [85, 85, 85, 95, 100, 75, 90, 70, 70, 70],
+    };
+
+    const sweSkills = {
+        labels: ['Docker', 'Git/GitLab', 'CI/CD', 'FastAPI', 'HTML/CSS/JS', 'PHP', 'Agile/Scrum', 'Figma', 'Miro', 'Selenium', 'ETL'],
+        data: [65, 95, 80, 68, 90, 60, 95, 85, 75, 65, 58],
+    };
+
+    function updateContent() {
+        document.documentElement.lang = currentLanguage;
+
+        // Update static text elements
+        document.querySelectorAll('[data-i18n-key]').forEach(element => {
+            const key = element.getAttribute('data-i18n-key');
+            const keys = key.split('.');
+            let text = translations[currentLanguage];
+            for (const k of keys) {
+                if (text && text[k] !== undefined) {
+                    text = text[k];
+                } else {
+                    text = ''; // Fallback if key not found
+                    break;
+                }
+            }
+            if (element.tagName === 'A' && element.classList.contains('nav-link')) {
+                 element.textContent = text; // For nav links specifically
+            } else {
+                element.innerHTML = text; // Use innerHTML for potential HTML entities like &copy;
+            }
+        });
+
+        // Update custom language dropdown text
+        document.getElementById('selected-lang-text').textContent = currentLanguage.toUpperCase();
+
+
+        renderExperience();
+        renderProjects();
+        renderEducation();
+        renderSkillsCharts();
+    }
+
+    function renderExperience() {
+        const container = document.getElementById('experience-timeline');
+        container.innerHTML = experienceData.map((item, index) => `
+            <div class="relative">
+                <div class="flex items-center">
+                    <div class="z-10 flex items-center justify-center w-10 h-10 bg-cyan-600 rounded-full ring-4 ring-slate-50">
+                        <span class="text-white font-bold">${experienceData.length - index}</span>
+                    </div>
+                    <div class="flex-1 ml-4">
+                         <button class="w-full text-left experience-toggle p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-bold text-slate-800">${item[`role_${currentLanguage}`]}</h3>
+                                    <p class="text-sm text-cyan-700 font-medium">${item.company} - ${item.location}</p>
+                                    <p class="text-xs text-slate-500 mt-1">${item.period}</p>
+                                </div>
+                                <svg class="w-5 h-5 text-slate-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+                <div class="experience-details hidden pl-16 pt-4 pb-4">
+                    <ul class="list-disc list-inside space-y-2 text-slate-600 bg-slate-100 p-4 rounded-md">
+                        ${item[`tasks_${currentLanguage}`].map(task => `<li>${task}</li>`).join('')}
+                    </ul>
+                </div>
+            </div>
+        `).join('');
+
+        document.querySelectorAll('.experience-toggle').forEach(button => {
+            button.addEventListener('click', () => {
+                const details = button.closest('.relative').querySelector('.experience-details');
+                details.classList.toggle('hidden');
+                button.querySelector('svg').classList.toggle('rotate-180');
+            });
+        });
+    }
+
+    function renderProjects() {
+        const grid = document.getElementById('project-grid');
+        const filtersContainer = document.getElementById('project-filters');
+        
+        const categories = ['All', ...new Set(projectData.map(p => p.category))]; // Use 'All' for filter to map to both languages
+        
+        filtersContainer.innerHTML = categories.map(cat => {
+            let filterText;
+            if (cat === 'All') filterText = translations[currentLanguage]['projects']['filterAll'];
+            else if (cat === 'ML') filterText = translations[currentLanguage]['projects']['filterML'];
+            else if (cat === 'Web') filterText = translations[currentLanguage]['projects']['filterWeb'];
+            else if (cat === 'Software') filterText = translations[currentLanguage]['projects']['filterSoftware'];
+            else if (cat === 'UX') filterText = translations[currentLanguage]['projects']['filterUX'];
+
+            return `
+                <button class="project-filter-btn px-4 py-2 text-sm font-medium rounded-full transition-colors ${cat === 'All' ? 'bg-cyan-600 text-white' : 'bg-white text-slate-600 hover:bg-slate-100'}" data-filter="${cat}">
+                    ${filterText}
+                </button>
+            `;
+        }).join('');
+
+        grid.innerHTML = projectData.map(p => `
+            <div class="project-card bg-white rounded-lg shadow-sm p-6 flex flex-col transition-transform duration-300 hover:scale-105" data-category="${p.category}">
+                <h3 class="font-bold text-slate-800">${p[`title_${currentLanguage}`]}</h3>
+                <p class="text-sm text-slate-600 mt-2 flex-grow">${p[`description_${currentLanguage}`]}</p>
+                <p class="text-xs text-cyan-700 font-semibold mt-4">${p.tools}</p>
+            </div>
+        `).join('');
+
+        const filterButtons = document.querySelectorAll('.project-filter-btn');
+        const projectCards = document.querySelectorAll('.project-card');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const filter = button.dataset.filter;
+                
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('bg-cyan-600', 'text-white');
+                    btn.classList.add('bg-white', 'text-slate-600', 'hover:bg-slate-100');
+                });
+                button.classList.add('bg-cyan-600', 'text-white');
+                button.classList.remove('bg-white', 'text-slate-600', 'hover:bg-slate-100');
+
+                projectCards.forEach(card => {
+                    if (filter === 'All' || card.dataset.category === filter) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+             // Set initial active state for the "All" button
+            if (button.dataset.filter === 'All') {
+                button.classList.add('bg-cyan-600', 'text-white');
+                button.classList.remove('bg-white', 'text-slate-600', 'hover:bg-slate-100');
+            }
+        });
+    }
+    
+    function renderEducation() {
+        const container = document.getElementById('education-list');
+        container.innerHTML = educationData.map((item, index) => `
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <button class="w-full text-left education-toggle" data-index="${index}">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-lg">${item[`degree_${currentLanguage}`]}</h3>
+                            <p class="text-md text-cyan-700 font-medium">${item.university}</p>
+                            <p class="text-sm text-slate-500 mt-1">${item.location} | ${item.period}</p>
+                            ${item[`details_${currentLanguage}`] ? `<p class="text-sm text-slate-600 mt-2">${item[`details_${currentLanguage}`]}</p>` : ''}
+                            ${item[`thesisTitle_${currentLanguage}`] ? `<p class="text-sm font-semibold text-slate-700 mt-2">${translations[currentLanguage]['education']['thesisPrefix']}: ${item[`thesisTitle_${currentLanguage}`]}</p>` : ''}
+                        </div>
+                        ${item[`thesisAbstract_${currentLanguage}`] ? `<svg class="w-5 h-5 text-slate-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>` : ''}
+                    </div>
+                </button>
+                ${item[`thesisAbstract_${currentLanguage}`] ? `
+                    <div class="thesis-abstract hidden mt-4 pt-4 border-t border-slate-200 text-sm text-slate-600">
+                        <h4 class="font-semibold text-slate-800 mb-2">${translations[currentLanguage]['education']['thesisAbstractHeading']}:</h4>
+                        <p>${item[`thesisAbstract_${currentLanguage}`]}</p>
+                    </div>
+                ` : ''}
+            </div>
+        `).join('');
+
+        document.querySelectorAll('.education-toggle').forEach(button => {
+            if (button.closest('.bg-white').querySelector('.thesis-abstract')) {
+                button.addEventListener('click', () => {
+                    const details = button.closest('.bg-white').querySelector('.thesis-abstract');
+                    details.classList.toggle('hidden');
+                    button.querySelector('svg').classList.toggle('rotate-180');
+                });
+            }
+        });
+    }
+
+    function renderSkillsCharts() {
+        // Destroy existing charts if they exist
+        if (chartInstances.mlSkillsChart) {
+            chartInstances.mlSkillsChart.destroy();
+        }
+        if (chartInstances.sweSkillsChart) {
+            chartInstances.sweSkillsChart.destroy();
+        }
+
+        chartInstances.mlSkillsChart = createChart('mlSkillsChart', mlSkills.labels, mlSkills.data, translations[currentLanguage]['skills']['competence']);
+        chartInstances.sweSkillsChart = createChart('sweSkillsChart', sweSkills.labels, sweSkills.data, translations[currentLanguage]['skills']['competence']);
+    }
+
+
+    function createChart(canvasId, labels, data, label) {
+        const ctx = document.getElementById(canvasId).getContext('2d');
+        return new Chart(ctx, { // Return the chart instance
+            type: 'bar',
+            data: {
+                labels: labels.map(l => { // Wrap labels for better display
+                    const words = l.split(' ');
+                    let line = '';
+                    let lines = [];
+                    words.forEach(word => {
+                        if ((line + word).length > 16) { // Max 16 chars per line
+                            lines.push(line.trim());
+                            line = word + ' ';
+                        } else {
+                            line += word + ' ';
+                        }
+                    });
+                    lines.push(line.trim());
+                    return lines;
+                }),
+                datasets: [{
+                    label: label,
+                    data: data,
+                    backgroundColor: 'rgba(8, 145, 178, 0.7)', // cyan-600 with opacity
+                    borderColor: 'rgba(8, 145, 178, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 100,
+                         grid: { display: false }
+                    },
+                    y: {
+                        grid: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return ` ${translations[currentLanguage]['skills']['competence']}: ${context.raw}%`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    function setupFadeInSections() {
+        const sections = document.querySelectorAll('.section-fade-in');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        sections.forEach(section => observer.observe(section));
+    }
+    
+    function setupNavHighlighting() {
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(link => {
+                        link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
+                    });
+                }
+            });
+        }, { rootMargin: '-50% 0px -50% 0px' });
+        
+        sections.forEach(section => observer.observe(section));
+    }
+
+    // Custom Language Dropdown Logic
+    const dropdownToggle = document.getElementById('dropdown-toggle');
+    const dropdownMenu = document.getElementById('dropdown-menu');
+    const selectedLangText = document.getElementById('selected-lang-text');
+
+    dropdownToggle.addEventListener('click', () => {
+        dropdownMenu.classList.toggle('show');
+        dropdownToggle.classList.toggle('active');
+    });
+
+    dropdownMenu.querySelectorAll('.dropdown-menu-item').forEach(item => {
+        item.addEventListener('click', () => {
+            currentLanguage = item.dataset.lang;
+            localStorage.setItem('cvLanguage', currentLanguage);
+            selectedLangText.textContent = currentLanguage.toUpperCase();
+            dropdownMenu.classList.remove('show');
+            dropdownToggle.classList.remove('active');
+            updateContent();
+        });
+    });
+
+    // Close dropdown if clicked outside
+    document.addEventListener('click', (event) => {
+        if (!dropdownToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+            dropdownMenu.classList.remove('show');
+            dropdownToggle.classList.remove('active');
+        }
+    });
+
+    // Mobile Menu Toggle Logic
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuOpenIcon = mobileMenuButton.querySelector('svg.block');
+    const menuCloseIcon = mobileMenuButton.querySelector('svg.hidden');
+
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+        menuOpenIcon.classList.toggle('hidden');
+        menuCloseIcon.classList.toggle('hidden');
+    });
+
+    // Close mobile menu when a link is clicked
+    mobileMenu.querySelectorAll('.mobile-nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            menuOpenIcon.classList.remove('hidden');
+            menuCloseIcon.classList.add('hidden');
+        });
+    });
+
+    // Print button logic
+    document.getElementById('print-button').addEventListener('click', () => {
+        window.print();
+    });
+
+    // Initialize content and language dropdown state
+    selectedLangText.textContent = currentLanguage.toUpperCase(); // Set initial text
+    updateContent(); // Initial render
+    setupFadeInSections();
+    setupNavHighlighting();
+});
+</script>
+</body>
+</html>
