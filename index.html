@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Slate & Cyan -->
-    <!-- Application Structure Plan: A single-page, vertically scrolling application with a sticky navigation bar for smooth scrolling. This structure provides a familiar yet enhanced resume experience. Key sections (Experience, Projects, Skills) are made interactive to improve engagement and information digestibility. The Experience section uses an expandable timeline to reduce initial clutter. The Projects section features a filterable grid, allowing recruiters to quickly find relevant relevant work. The Skills section uses charts to visually represent technical competencies, making them easier to parse than a simple list. New sections for Hobbies, Social Media, and Books are added to provide a more personal insight into the applicant. A custom-styled language dropdown is implemented for English and German. A print function is added to allow saving as PDF, optimizing layout for print. This user-flow is designed to guide the user from a general overview to specific details based on their interests, now with multi-language support and print capabilities. -->
+    <!-- Application Structure Plan: A single-page, vertically scrolling application with a sticky navigation bar for smooth scrolling. This structure provides a familiar yet enhanced resume experience. Key sections (Experience, Projects, Skills) are made interactive to improve engagement and information digestibility. The Experience section uses an expandable timeline to reduce initial clutter. The Projects section features a filterable grid, allowing recruiters to quickly find relevant relevant work. The Skills section uses charts to visually represent technical competencies, making them easier to parse than a simple list. New sections for Hobbies, Social Media, and Books are added to provide a more personal insight into the applicant. A custom-styled language dropdown is implemented for English and German, now visible on all screen sizes. A responsive mobile navigation (hamburger menu) is added. A print function is added to allow saving as PDF, optimizing layout for print. This user-flow is designed to guide the user from a general overview to specific details based on their interests, now with multi-language support and print capabilities. -->
     <!-- Visualization & Content Choices:
         - Experience: Report Info -> Job History -> Goal: Show change/progression -> Viz: Interactive Vertical Timeline -> Interaction: Click to expand/collapse details -> Justification: Keeps the UI clean and focuses user attention on one role at a time -> Method: HTML/CSS/JS (content from dynamic translations).
         - Projects: Report Info -> Project List -> Goal: Organize/Showcase -> Viz: Filterable Card Grid -> Interaction: Buttons filter projects by category -> Justification: Allows recruiters to find relevant examples quickly, demonstrating a breadth of skills -> Method: HTML/CSS/JS (content from dynamic translations).
@@ -115,7 +115,7 @@
 
         /* Print-specific styles */
         @media print {
-            #navbar, .custom-dropdown, #print-button {
+            #navbar, #mobile-menu-button, .custom-dropdown, #print-button {
                 display: none !important;
             }
             body {
@@ -160,8 +160,8 @@
                 <div class="flex-shrink-0">
                     <span class="text-xl font-bold text-slate-800">Omar Salama</span>
                 </div>
-                <div class="hidden md:flex items-center space-x-4">
-                    <div class="custom-dropdown">
+                <div class="flex items-center"> <!-- This div now always visible -->
+                    <div class="custom-dropdown mr-4 md:mr-0"> <!-- Language dropdown now outside hidden div -->
                         <button id="dropdown-toggle" class="dropdown-toggle">
                             <span id="selected-lang-text">DE</span>
                             <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -171,17 +171,46 @@
                             <div class="dropdown-menu-item" data-lang="en">EN</div>
                         </div>
                     </div>
-                    <div class="flex items-baseline space-x-4 ml-4">
-                        <a href="#hero" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.home"></a>
-                        <a href="#experience" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.experience"></a>
-                        <a href="#projects" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.projects"></a>
-                        <a href="#skills" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.skills"></a>
-                        <a href="#education" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.education"></a>
-                        <a href="#hobbies" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.hobbies"></a>
-                        <a href="#social-media" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.socialMedia"></a>
-                        <a href="#books" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.books"></a>
+                    <!-- Hamburger menu for mobile navigation -->
+                    <div class="-mr-2 flex md:hidden">
+                        <button type="button" id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-500" aria-controls="mobile-menu" aria-expanded="false">
+                            <span class="sr-only">Open main menu</span>
+                            <!-- Icon when menu is closed. -->
+                            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                            <!-- Icon when menu is open. -->
+                            <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="hidden md:block"> <!-- Desktop nav links -->
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="#hero" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.home"></a>
+                            <a href="#experience" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.experience"></a>
+                            <a href="#projects" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.projects"></a>
+                            <a href="#skills" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.skills"></a>
+                            <a href="#education" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.education"></a>
+                            <a href="#hobbies" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.hobbies"></a>
+                            <a href="#social-media" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.socialMedia"></a>
+                            <a href="#books" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-cyan-600" data-i18n-key="nav.books"></a>
+                        </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <!-- Mobile menu, show/hide based on menu state. -->
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#hero" class="mobile-nav-link text-slate-700 hover:bg-slate-100 hover:text-cyan-700 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.home"></a>
+                <a href="#experience" class="mobile-nav-link text-slate-700 hover:bg-slate-100 hover:text-cyan-700 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.experience"></a>
+                <a href="#projects" class="mobile-nav-link text-slate-700 hover:bg-slate-100 hover:text-cyan-700 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.projects"></a>
+                <a href="#skills" class="mobile-nav-link text-slate-700 hover:bg-slate-100 hover:text-cyan-700 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.skills"></a>
+                <a href="#education" class="mobile-nav-link text-slate-700 hover:bg-slate-100 hover:text-cyan-700 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.education"></a>
+                <a href="#hobbies" class="mobile-nav-link text-slate-700 hover:bg-slate-100 hover:text-cyan-700 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.hobbies"></a>
+                <a href="#social-media" class="mobile-nav-link text-slate-700 hover:bg-slate-100 hover:text-cyan-700 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.socialMedia"></a>
+                <a href="#books" class="mobile-nav-link text-slate-700 hover:bg-slate-100 hover:text-cyan-700 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.books"></a>
             </div>
         </div>
     </nav>
@@ -890,6 +919,27 @@ document.addEventListener('DOMContentLoaded', () => {
             dropdownMenu.classList.remove('show');
             dropdownToggle.classList.remove('active');
         }
+    });
+
+    // Mobile Menu Toggle Logic
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuOpenIcon = mobileMenuButton.querySelector('svg.block');
+    const menuCloseIcon = mobileMenuButton.querySelector('svg.hidden');
+
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+        menuOpenIcon.classList.toggle('hidden');
+        menuCloseIcon.classList.toggle('hidden');
+    });
+
+    // Close mobile menu when a link is clicked
+    mobileMenu.querySelectorAll('.mobile-nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            menuOpenIcon.classList.remove('hidden');
+            menuCloseIcon.classList.add('hidden');
+        });
     });
 
     // Print button logic
