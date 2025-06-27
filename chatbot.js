@@ -190,4 +190,3 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial UI text update on page load
     updateChatbotUI();
 });
-// --- END: Complete and Merged chatbot.js ---
