@@ -104,7 +104,14 @@ document.addEventListener('DOMContentLoaded', () => {
         messageDiv.classList.add('flex', sender === 'user' ? 'justify-end' : 'justify-start');
 
         const textBubble = document.createElement('div');
-        textBubble.classList.add('p-2', 'rounded-lg', 'max-w-[80%]', sender === 'user' ? 'bg-cyan-600 text-white' : 'bg-slate-200 text-slate-800');
+        textBubble.classList.add('p-2', 'rounded-lg', 'max-w-[80%]'); // Add the common classes first
+
+        if (sender === 'user') {
+            textBubble.classList.add('bg-cyan-600', 'text-white'); // Add individual classes for user messages
+        } else {
+            textBubble.classList.add('bg-slate-200', 'text-slate-800'); // Add individual classes for bot messages
+        }
+
         textBubble.textContent = text; // Use textContent to prevent XSS if external content
 
         messageDiv.appendChild(textBubble);
