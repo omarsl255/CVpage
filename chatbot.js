@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showThinkingIndicator(); // Use the new thinking indicator
 
         try {
-            const response = await fetch('https://omar-cv-chatbot-349165074208.europe-west1.run.app/chat', {
+            const response = await fetch('https://omar-chatbot-349165074208.europe-west1.run.app/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
