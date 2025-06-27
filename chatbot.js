@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // Updated endpoint to match app.py
-            const response = await fetch('http://localhost:3000/chat', { // Changed from /api/chat to /chat
+            const response = await fetch(' https://omar-cv-chatbot-349165074208.europe-west1.run.app', { // Changed from /api/chat to /chat
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
