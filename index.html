@@ -154,6 +154,7 @@
 </head>
 <body class="bg-slate-50 text-slate-700">
 
+
     <nav id="navbar" class="sticky top-0 z-50 bg-slate-50/80 backdrop-blur-lg border-b border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
@@ -362,154 +363,178 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentLanguage = localStorage.getItem('cvLanguage') || 'de'; // Default to German or last selection
 
     const translations = {
-        de: {
-            nav: {
-                home: "Home",
-                experience: "Erfahrung",
-                projects: "Projekte",
-                skills: "Kenntnisse",
-                education: "Bildung",
-                hobbies: "Hobbys",
-                socialMedia: "Social Media",
-                books: "Bücher"
-            },
-            hero: {
-                title: "Data & AI Specialist | Software Engineer",
-                description: "Ein motivierter und analytischer Ingenieur mit einer Leidenschaft für maschinelles Lernen, Datenanalyse und die Entwicklung robuster Softwarelösungen. Ich strebe danach, komplexe Probleme zu lösen und durch datengesteuerte Erkenntnisse innovative Produkte zu schaffen."
-            },
-            experience: {
-                heading: "Berufserfahrung",
-                description: "Dieser Abschnitt beschreibt meinen beruflichen Werdegang und die dabei gesammelten praktischen Erfahrungen. Jede Station hat zu meiner Entwicklung als Ingenieur beigetragen. Klicken Sie auf eine Position, um mehr über meine Aufgaben und Erfolge zu erfahren."
-            },
-            projects: {
-                heading: "Projekte",
-                description: "Hier finden Sie eine Auswahl meiner akademischen und beruflichen Projekte. Sie zeigen meine Fähigkeit, theoretisches Wissen in die Praxis umzusetzen. Nutzen Sie die Filter, um Projekte nach Interessengebieten zu sortieren.",
-                filterAll: "Alle",
-                filterML: "Machine Learning",
-                filterWeb: "Webentwicklung",
-                filterSoftware: "Software Engineering",
-                filterUX: "UI/UX Design"
-            },
-            skills: {
-                heading: "Kenntnisse & Fähigkeiten",
-                description: "Dieser Abschnitt bietet eine visuelle Übersicht meiner technischen Kompetenzen. Die Diagramme fassen meine wichtigsten Werkzeuge und Technologien zusammen, von Programmiersprachen und Frameworks bis hin zu Datenbanken und DevOps-Tools.",
-                mlDataAnalysis: "ML & Datenanalyse",
-                sweWebEngineering: "Software & Web Engineering",
-                competence: "Kompetenz" // For chart tooltips
-            },
-            education: {
-                heading: "Bildungsweg",
-                description: "Mein akademischer Hintergrund legte den Grundstein für meine Karriere in der Informatik und künstlichen Intelligenz.",
-                thesisPrefix: "Bachelorarbeit",
-                thesisAbstractHeading: "Abstract"
-            },
-            hobbies: {
-                heading: "Hobbys",
-                description: "Neben meiner beruflichen Leidenschaft für Technologie pflege ich verschiedene Hobbys, die meinen Horizont erweitern und für Ausgleich sorgen.",
-                sportsFitness: "Sport & Fitness",
-                bjj: "Brazilian Jiu-Jitsu (BJJ)",
-                mma: "MMA",
-                gym: "Fitnessstudio",
-                tableTennis: "Tischtennis",
-                creativeCulinary: "Kreatives & Kulinarisches",
-                cooking: "Kochen",
-                photography: "Fotografie",
-                myInstagram: "Mein Instagram",
-                teaching: "Lehren"
-            },
-            socialMedia: {
-                heading: "Social Media",
-                description: "Vernetzung ist mir wichtig, sowohl beruflich als auch privat. Hier finden Sie meine Präsenzen in sozialen Medien.",
-                instagramPersonal: "Instagram (Persönlich)",
-                instagramPhoto: "Instagram (Fotografie)",
-                x: "X (Twitter)",
-                note: "" 
-            },
-            books: {
-                heading: "Bücher & Leseempfehlungen",
-                description: "Ich bin ein begeisterter Leser und ständig darauf bedacht, mein Wissen zu erweitern. Hier ist eine Auswahl von Büchern oder eine Verbindung zu meinen Leseaktivitäten (z.B. Goodreads-Profil).",
-                goodreadsTitle: "Meine Goodreads-Seite:",
-                goodreadsText: "Entdecke, was ich lese, und meine aktuellen Leseempfehlungen auf meinem Goodreads-Profil:"
-            },
-            footer: {
-                contactHeading: "Kontakt aufnehmen",
-                copyright: "&copy; 2025 Omar Salama. Alle Rechte vorbehalten."
-            }
+    de: {
+        nav: {
+            home: "Home",
+            experience: "Erfahrung",
+            projects: "Projekte",
+            skills: "Kenntnisse",
+            education: "Bildung",
+            hobbies: "Hobbys",
+            socialMedia: "Social Media",
+            books: "Bücher"
         },
-        en: {
-            nav: {
-                home: "Home",
-                experience: "Experience",
-                projects: "Projects",
-                skills: "Skills",
-                education: "Education",
-                hobbies: "Hobbies",
-                socialMedia: "Social Media",
-                books: "Books"
-            },
-            hero: {
-                title: "Data & AI Specialist | Software Engineer",
-                description: "A motivated and analytical engineer with a passion for machine learning, data analysis, and developing robust software solutions. I strive to solve complex problems and create innovative products through data-driven insights."
-            },
-            experience: {
-                heading: "Professional Experience",
-                description: "This section outlines my professional career and the practical experience gained. Each position has contributed to my development as an engineer. Click on a position to learn more about my responsibilities and achievements."
-            },
-            projects: {
-                heading: "Projects",
-                description: "Here you will find a selection of my academic and professional projects. They demonstrate my ability to translate theoretical knowledge into practical applications. Use the filters to sort projects by area of interest.",
-                filterAll: "All",
-                filterML: "Machine Learning",
-                filterWeb: "Web Development",
-                filterSoftware: "Software Engineering",
-                filterUX: "UI/UX Design"
-            },
-            skills: {
-                heading: "Skills & Competencies",
-                description: "This section provides a visual overview of my technical competencies. The charts summarize my most important tools and technologies, from programming languages and frameworks to databases and DevOps tools.",
-                mlDataAnalysis: "ML & Data Analysis",
-                sweWebEngineering: "Software & Web Engineering",
-                competence: "Competence" // For chart tooltips
-            },
-            education: {
-                heading: "Education",
-                description: "My academic background laid the foundation for my career in Computer Science and Artificial Intelligence.",
-                thesisPrefix: "Bachelor Thesis",
-                thesisAbstractHeading: "Abstract"
-            },
-            hobbies: {
-                heading: "Hobbies",
-                description: "In addition to my professional passion for technology, I pursue various hobbies that broaden my horizons and provide balance.",
-                sportsFitness: "Sports & Fitness",
-                bjj: "Brazilian Jiu-Jitsu (BJJ)",
-                mma: "MMA",
-                gym: "Gym",
-                tableTennis: "Table Tennis",
-                creativeCulinary: "Creative & Culinary",
-                cooking: "Cooking",
-                photography: "Photography",
-                myInstagram: "My Instagram",
-                teaching: "Teaching"
-            },
-            socialMedia: {
-                heading: "Social Media",
-                description: "Networking is important to me, both professionally and personally. Here you will find my social media presences.",
-                instagramPersonal: "Instagram (Personal)",
-                instagramPhoto: "Instagram (Photography)",
-                x: "X (Twitter)",
-                note: "" 
-            },
-            books: {
-                heading: "Books & Reading Recommendations",
-                description: "I am an avid reader and constantly striving to expand my knowledge. Here is a selection of books or a link to my reading activities (e.g., Goodreads profile).",
-                goodreadsTitle: "My Goodreads Page:",
-                goodreadsText: "Discover what I'm reading and my current recommendations on my Goodreads profile:"
-            },
-            footer: {
-                contactHeading: "Get in Touch",
-                copyright: "&copy; 2025 Omar Salama. All rights reserved."
-            }
+        hero: {
+            title: "Data & AI Specialist | Software Engineer",
+            description: "Ein motivierter und analytischer Ingenieur mit einer Leidenschaft für maschinelles Lernen, Datenanalyse und die Entwicklung robuster Softwarelösungen. Ich strebe danach, komplexe Probleme zu lösen und durch datengesteuerte Erkenntnisse innovative Produkte zu schaffen."
+        },
+        experience: {
+            heading: "Berufserfahrung",
+            description: "Dieser Abschnitt beschreibt meinen beruflichen Werdegang und die dabei gesammelten praktischen Erfahrungen. Jede Station hat zu meiner Entwicklung als Ingenieur beigetragen. Klicken Sie auf eine Position, um mehr über meine Aufgaben und Erfolge zu erfahren."
+        },
+        projects: {
+            heading: "Projekte",
+            description: "Hier finden Sie eine Auswahl meiner akademischen und beruflichen Projekte. Sie zeigen meine Fähigkeit, theoretisches Wissen in die Praxis umzusetzen. Nutzen Sie die Filter, um Projekte nach Interessengebieten zu sortieren.",
+            filterAll: "Alle",
+            filterML: "Machine Learning",
+            filterWeb: "Webentwicklung",
+            filterSoftware: "Software Engineering",
+            filterUX: "UI/UX Design"
+        },
+        skills: {
+            heading: "Kenntnisse & Fähigkeiten",
+            description: "Dieser Abschnitt bietet eine visuelle Übersicht meiner technischen Kompetenzen. Die Diagramme fassen meine wichtigsten Werkzeuge und Technologien zusammen, von Programmiersprachen und Frameworks bis hin zu Datenbanken und DevOps-Tools.",
+            mlDataAnalysis: "ML & Datenanalyse",
+            sweWebEngineering: "Software & Web Engineering",
+            competence: "Kompetenz" // For chart tooltips
+        },
+        education: {
+            heading: "Bildungsweg",
+            description: "Mein akademischer Hintergrund legte den Grundstein für meine Karriere in der Informatik und künstlichen Intelligenz.",
+            thesisPrefix: "Bachelorarbeit",
+            thesisAbstractHeading: "Abstract"
+        },
+        hobbies: {
+            heading: "Hobbys",
+            description: "Neben meiner beruflichen Leidenschaft für Technologie pflege ich verschiedene Hobbys, die meinen Horizont erweitern und für Ausgleich sorgen.",
+            sportsFitness: "Sport & Fitness",
+            bjj: "Brazilian Jiu-Jitsu (BJJ)",
+            mma: "MMA",
+            gym: "Fitnessstudio",
+            tableTennis: "Tischtennis",
+            creativeCulinary: "Kreatives & Kulinarisches",
+            cooking: "Kochen",
+            photography: "Fotografie",
+            myInstagram: "Mein Instagram",
+            teaching: "Lehren"
+        },
+        socialMedia: {
+            heading: "Social Media",
+            description: "Vernetzung ist mir wichtig, sowohl beruflich als auch privat. Hier finden Sie meine Präsenzen in sozialen Medien.",
+            instagramPersonal: "Instagram (Persönlich)",
+            instagramPhoto: "Instagram (Fotografie)",
+            x: "X (Twitter)",
+            note: ""
+        },
+        books: {
+            heading: "Bücher & Leseempfehlungen",
+            description: "Ich bin ein begeisterter Leser und ständig darauf bedacht, mein Wissen zu erweitern. Hier ist eine Auswahl von Büchern oder eine Verbindung zu meinen Leseaktivitäten (z.B. Goodreads-Profil).",
+            goodreadsTitle: "Meine Goodreads-Seite:",
+            goodreadsText: "Entdecke, was ich lese, und meine aktuellen Leseempfehlungen auf meinem Goodreads-Profil:"
+        },
+        footer: {
+            contactHeading: "Kontakt aufnehmen",
+            copyright: "&copy; 2025 Omar Salama. Alle Rechte vorbehalten."
+        },
+        // NEW CHATBOT KEYS START HERE
+        chatbot: {
+            toggleAlt: "Chatbot öffnen",
+            title: "Omar fragen",
+            welcomeMessage: "Hallo! Ich bin Omars CV-Chatbot. Fragen Sie mich etwas über Omars Erfahrung, Projekte oder Fähigkeiten!",
+            inputPlaceholder: "Stellen Sie eine Frage über Omar...",
+            sendButton: "Senden",
+            thinking: "Omar denkt nach...",
+            error: "Entschuldigung, es gab ein Problem beim Abrufen der Antwort. Bitte versuchen Sie es später erneut.",
+            noInfo: "Ich habe zu dieser Frage leider keine Informationen in Omars Lebenslauf gefunden. Vielleicht möchten Sie eine andere Frage stellen oder Omar direkt kontaktieren?",
         }
+        // NEW CHATBOT KEYS END HERE
+    },
+    en: {
+        nav: {
+            home: "Home",
+            experience: "Experience",
+            projects: "Projects",
+            skills: "Skills",
+            education: "Education",
+            hobbies: "Hobbies",
+            socialMedia: "Social Media",
+            books: "Books"
+        },
+        hero: {
+            title: "Data & AI Specialist | Software Engineer",
+            description: "A motivated and analytical engineer with a passion for machine learning, data analysis, and developing robust software solutions. I strive to solve complex problems and create innovative products through data-driven insights."
+        },
+        experience: {
+            heading: "Professional Experience",
+            description: "This section outlines my professional career and the practical experience gained. Each position has contributed to my development as an engineer. Click on a position to learn more about my responsibilities and achievements."
+        },
+        projects: {
+            heading: "Projects",
+            description: "Here you will find a selection of my academic and professional projects. They demonstrate my ability to translate theoretical knowledge into practical applications. Use the filters to sort projects by area of interest.",
+            filterAll: "All",
+            filterML: "Machine Learning",
+            filterWeb: "Web Development",
+            filterSoftware: "Software Engineering",
+            filterUX: "UI/UX Design"
+        },
+        skills: {
+            heading: "Skills & Competencies",
+            description: "This section provides a visual overview of my technical competencies. The charts summarize my most important tools and technologies, from programming languages and frameworks to databases and DevOps tools.",
+            mlDataAnalysis: "ML & Data Analysis",
+            sweWebEngineering: "Software & Web Engineering",
+            competence: "Competence" // For chart tooltips
+        },
+        education: {
+            heading: "Education",
+            description: "My academic background laid the foundation for my career in Computer Science and Artificial Intelligence.",
+            thesisPrefix: "Bachelor Thesis",
+            thesisAbstractHeading: "Abstract"
+        },
+        hobbies: {
+            heading: "Hobbies",
+            description: "In addition to my professional passion for technology, I pursue various hobbies that broaden my horizons and provide balance.",
+            sportsFitness: "Sports & Fitness",
+            bjj: "Brazilian Jiu-Jitsu (BJJ)",
+            mma: "MMA",
+            gym: "Gym",
+            tableTennis: "Table Tennis",
+            creativeCulinary: "Creative & Culinary",
+            cooking: "Cooking",
+            photography: "Photography",
+            myInstagram: "My Instagram",
+            teaching: "Teaching"
+        },
+        socialMedia: {
+            heading: "Social Media",
+            description: "Networking is important to me, both professionally and personally. Here you will find my social media presences.",
+            instagramPersonal: "Instagram (Personal)",
+            instagramPhoto: "Instagram (Photography)",
+            x: "X (Twitter)",
+            note: ""
+        },
+        books: {
+            heading: "Books & Reading Recommendations",
+            description: "I am an avid reader and constantly striving to expand my knowledge. Here is a selection of books or a link to my reading activities (e.g., Goodreads profile).",
+            goodreadsTitle: "My Goodreads Page:",
+            goodreadsText: "Discover what I'm reading and my current recommendations on my Goodreads profile:"
+        },
+        footer: {
+            contactHeading: "Get in Touch",
+            copyright: "&copy; 2025 Omar Salama. All rights reserved."
+        },
+        // NEW CHATBOT KEYS START HERE
+        chatbot: {
+            toggleAlt: "Open Chatbot",
+            title: "Ask Omar",
+            welcomeMessage: "Hello! I'm Omar's CV chatbot. Ask me anything about Omar's experience, projects, or skills!",
+            inputPlaceholder: "Ask a question about Omar...",
+            sendButton: "Send",
+            thinking: "Omar is thinking...",
+            error: "Sorry, there was an issue retrieving the answer. Please try again later.",
+            noInfo: "I'm afraid I don't have information on that specific question in Omar's CV. Perhaps you'd like to ask something else or contact Omar directly?",
+        }
+        // NEW CHATBOT KEYS END HERE
+    }
     };
 
     const experienceData = [
@@ -954,5 +979,30 @@ document.addEventListener('DOMContentLoaded', () => {
     setupNavHighlighting();
 });
 </script>
+
+<div id="chatbot-container" class="fixed bottom-4 right-4 z-50">
+    <button id="chatbot-toggle" class="bg-cyan-600 text-white p-4 rounded-full shadow-lg hover:bg-cyan-700 transition-all duration-300">
+        <span id="chatbot-toggle-icon">💬</span>
+        <span class="sr-only" data-i18n-key="chatbot.toggleAlt">Open Chatbot</span>
+    </button>
+    <div id="chat-window" class="hidden bg-white rounded-lg shadow-xl w-80 h-96 flex flex-col transform translate-y-full opacity-0 transition-all duration-300">
+        <div class="bg-cyan-600 text-white p-3 rounded-t-lg flex justify-between items-center">
+            <span class="font-semibold" data-i18n-key="chatbot.title">Ask Omar</span>
+            <button id="close-chat" class="text-white hover:text-slate-100 focus:outline-none text-2xl leading-none">&times;</button>
+        </div>
+        <div id="chat-messages" class="flex-grow p-3 overflow-y-auto space-y-2 text-sm">
+            <div class="flex justify-start">
+                <div class="bg-slate-200 p-2 rounded-lg max-w-[80%]" data-i18n-key="chatbot.welcomeMessage"></div>
+            </div>
+        </div>
+        <div class="border-t border-slate-200 p-3 flex">
+            <input type="text" id="chat-input" placeholder="Ask a question about Omar..." class="flex-grow border border-slate-300 rounded-l-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-500" data-i18n-placeholder="chatbot.inputPlaceholder">
+            <button id="send-chat" class="bg-cyan-600 text-white px-4 py-2 rounded-r-md hover:bg-cyan-700 transition-colors" data-i18n-key="chatbot.sendButton">Send</button>
+        </div>
+    </div>
+</div>
+
+<script src="chatbot.js"></script>
+
 </body>
 </html>
