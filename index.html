@@ -537,61 +537,80 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     };
 
-    const experienceData = [
-        {
-            role_de: "Bachelorand", role_en: "Bachelor Student",
-            company: "VAIVA Safe Mobility",
-            location: "Gaimersheim",
-            period: "11/2024 – 03/2025",
-            tasks_de: [
-                "Entwicklung mehrerer Machine-Learning-Modelle für Zeitreihendaten.",
-                "Konzeption einer Multitask-Pipeline, die Klassifikation und Regression kombiniert.",
-                "Aufbau und Test fortgeschrittener Deep-Learning-Architekturen, einschließlich CNNs und LSTMs.",
-                "Anwendung von Knowledge-Transfer-Techniken und Modell-Feinabstimmung.",
-                "Implementierung benutzerdefinierter Verlustfunktionen und Durchführung einer umfassenden Modellevaluierung.",
-                "Generierung von Visualisierungen und automatisierten Berichten zur Ergebnisanalyse.",
-                "Bewies eine ausgezeichnete Auffassungsgabe und Fähigkeit, komplexe Arbeitsinhalte schnell zu erfassen; zielstrebig, sorgfältig und effizient in der Arbeitsweise."
-            ],
-            tasks_en: [
-                "Developed multiple machine learning models for time series data.",
-                "Designed a multitask pipeline combining classification and regression.",
-                "Built and tested advanced deep learning architectures including CNNs, LSTMs.",
-                "Applied knowledge transfer techniques and model fine-tuning.",
-                "Implemented custom loss functions and conducted an extensive model evaluation.",
-                "Generated visualizations and automated reports for result analysis.",
-                "Demonstrated excellent comprehension and ability to quickly grasp complex work content; goal-oriented, meticulous, and efficient in work."
-            ]
-        },
-        {
-            role_de: "Werkstudent Softwareentwicklung", role_en: "Software Development Working Student",
-            company: "VAIVA Safe Mobility",
-            location: "Gaimersheim",
-            period: "02/2023 – 11/2024",
-            tasks_de: [
-                "Analyse und Refactoring von bestehendem Matlab-Code und GUIs zur Erstellung umfassender Unit-Tests zur Qualitätssicherung.",
-                "Entwicklung eines robusten Automatisierungstools zur Berichterstellung in HTML, PDF und PowerPoint mittels Python und R.",
-                "Demonstrierte umfassende, vielseitige und sehr gute Fachkenntnisse; ausgeprätes analytisches Denkvermögen und rasche Auffassungsgabe."
-            ],
-            tasks_en: [
-                "Analyzed and refactored legacy Matlab code and GUIs to write comprehensive unit tests to increase quality assurance.",
-                "Developed a robust automation tool for report generation in HTML, PDF, and PowerPoint, using Python and R.",
-                "Demonstrated comprehensive, versatile, and very good technical knowledge; pronounced analytical thinking and quick comprehension."
-            ]
-        },
-        {
-            role_de: "Kundenbetreuer", role_en: "Customer Service Representative",
-            company: "Concentrix",
-            location: "Kairo, Ägypten",
-            period: "07/2020 – 02/2021",
-            tasks_de: [
-                "Betreuung deutscher Kundenkonten (z.B. Expedia und booking.com)."
-            ],
-            tasks_en: [
-                "Worked on German accounts like Expedia and booking.com."
-            ]
-        }
-    ];
-
+const experienceData = [
+    {
+        role_de: "Bachelorand", role_en: "Bachelor Student",
+        company: "VAIVA Safe Mobility",
+        location: "Gaimersheim",
+        period: "11/2024 – 03/2025",
+        tasks_de: [
+            "Entwicklung mehrerer Machine-Learning-Modelle für Zeitreihendaten.",
+            "Konzeption einer Multitask-Pipeline, die Klassifikation und Regression kombiniert.",
+            "Aufbau und Test fortgeschrittener Deep-Learning-Architekturen, einschließlich CNNs und LSTMs.",
+            "Anwendung von Knowledge-Transfer-Techniken und Modell-Feinabstimmung.",
+            "Implementierung benutzerdefinierter Verlustfunktionen und Durchführung einer umfassenden Modellevaluierung.",
+            "Generierung von Visualisierungen und automatisierten Berichten zur Ergebnisanalyse.",
+            "Bewies eine ausgezeichnete Auffassungsgabe und Fähigkeit, komplexe Arbeitsinhalte schnell zu erfassen; zielstrebig, sorgfältig und effizient in der Arbeitsweise."
+        ],
+        tasks_en: [
+            "Developed multiple machine learning models for time series data.",
+            "Designed a multitask pipeline combining classification and regression.",
+            "Built and tested advanced deep learning architectures including CNNs, LSTMs.",
+            "Applied knowledge transfer techniques and model fine-tuning.",
+            "Implemented custom loss functions and conducted an extensive model evaluation.",
+            "Generated visualizations and automated reports for result analysis.",
+            "Demonstrated excellent comprehension and ability to quickly grasp complex work content; goal-oriented, meticulous, and efficient in work."
+        ]
+    },
+    {
+        role_de: "Werkstudent Softwareentwicklung", role_en: "Software Development Working Student",
+        company: "VAIVA Safe Mobility",
+        location: "Gaimersheim",
+        period: "02/2023 – 11/2024",
+        tasks_de: [
+            "Analyse und Refactoring von bestehendem Matlab-Code und GUIs zur Erstellung umfassender Unit-Tests zur Qualitätssicherung.",
+            "Entwicklung eines robusten Automatisierungstools zur Berichterstellung in HTML, PDF und PowerPoint mittels Python und R.",
+            "Demonstrierte umfassende, vielseitige und sehr gute Fachkenntnisse; ausgeprätes analytisches Denkvermögen und rasche Auffassungsgabe."
+        ],
+        tasks_en: [
+            "Analyzed and refactored legacy Matlab code and GUIs to write comprehensive unit tests to increase quality assurance.",
+            "Developed a robust automation tool for report generation in HTML, PDF, and PowerPoint, using Python and R.",
+            "Demonstrated comprehensive, versatile, and very good technical knowledge; pronounced analytical thinking and quick comprehension."
+        ]
+    },
+    {
+        role_de: "Werkstudent Testing & Projektmanagement", role_en: "Testing & Project Management Working Student",
+        company: "CHECK24",
+        location: "München",
+        period: "06/2022 – 01/2023",
+        tasks_de: [
+            "Durchführung manueller, integrativer, Smoke- und explorativer Tests für Web- und Mobile-Anwendungen zur Sicherstellung der Produktzuverlässigkeit.",
+            "Erstellung von Fehlerberichten, Feature-Tickets und Testplänen zur Unterstützung agiler Scrum-Prozesse.",
+            "Enge Zusammenarbeit mit Projektmanagern zur Sprintverfolgung und Verbesserung der Kommunikation zwischen QA und Entwicklung.",
+            "Beitrag zu UI/UX-Verbesserungen und Vorstellung neuer Feature-Ideen mittels Mockups.",
+            "Unterstützung bei der Produktfreigabevalidierung und Nachverfolgung nach Releases."
+        ],
+        tasks_en: [
+            "Conducted manual, integration, smoke, and exploratory testing for web and mobile applications, ensuring high product reliability.",
+            "Prepared bug reports, feature tickets, and test plans to support Scrum processes.",
+            "Collaborated closely with project managers to track sprint progress and improve communication across QA and development.",
+            "Contributed UI/UX improvements and proposed feature ideas with mockups.",
+            "Assisted in product release validation and post-release monitoring."
+        ]
+    },
+    {
+        role_de: "Kundenbetreuer", role_en: "Customer Service Representative",
+        company: "Concentrix",
+        location: "Kairo, Ägypten",
+        period: "07/2020 – 02/2021",
+        tasks_de: [
+            "Betreuung deutscher Kundenkonten (z.B. Expedia und booking.com)."
+        ],
+        tasks_en: [
+            "Worked on German accounts like Expedia and booking.com."
+        ]
+    }
+];
     const projectData = [
     {
         title_de: "WebCV: Interaktives & KI-gestütztes Persönliches Portfolio",
